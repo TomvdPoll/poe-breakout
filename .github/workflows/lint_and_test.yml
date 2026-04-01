@@ -1,0 +1,45 @@
+name: Check Code Quality
+permissions:
+  contents: read
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  quality:
+    name: Quality Control
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # Relevant for SonarCloud
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        if: ${{ always() }}
+        with:
+            activate-environment: true
+            enable-cache: true
+      - name: Install dependencies
+        if: ${{ always() }}
+        run: uv sync
+
+      - name: Lint
+        if: ${{ always() }}
+        run: poe lint --check
+      - name: Format
+        if: ${{ always() }}
+        run: poe format --check
+      - name: Import sorting
+        if: ${{ always() }}
+        run: poe sort --check
+      - name: Tests
+        if: ${{ always() }}
+        run: poe tests
+      - name: Actually stop now if any quality control failed
+        # All tests are run with always() not to stop on the first error.
+        # This step makes the workflow fail if any quality step failed.
+        if: ${{ failure() }}
+        run: exit 1
+
