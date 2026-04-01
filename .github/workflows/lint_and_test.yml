@@ -40,6 +40,7 @@ jobs:
       - name: Actually stop now if any quality control failed
         # All tests are run with always() not to stop on the first error.
         # This step makes the workflow fail if any quality step failed.
+        # this is a random comment
         if: ${{ failure() }}
         run: exit 1
 
