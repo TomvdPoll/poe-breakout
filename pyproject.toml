@@ -6,7 +6,6 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "click>=8.3.1",
-    "isort>=8.0.1",
     "numpy>=2.4.4",
     "poethepoet>=0.42.1",
     "pytest>=9.0.2",
@@ -35,9 +34,10 @@ args = [{name = "check", type="boolean", help= "Does not correct files, only war
   [[tool.poe.tasks.cleanup.switch]]
   case     = "True"
   sequence = ["lint --check", "format --check", "sort --check"]
+  ignore_fail = "return_non_zero"
   [[tool.poe.tasks.cleanup.switch]]
   sequence = ["lint", "format", "sort"]
-ignore_fail = true
+  ignore_fail = "return_non_zero"
 
 
 [tool.poe.tasks.lint]
