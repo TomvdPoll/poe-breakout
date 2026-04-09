@@ -36,7 +36,7 @@ jobs:
         run: poe sort --check
       - name: Tests
         if: ${{ always() }}
-        run: poe tests
+        run: poe test
       - name: Actually stop now if any quality control failed
         # All tests are run with always() not to stop on the first error.
         # This step makes the workflow fail if any quality step failed.
